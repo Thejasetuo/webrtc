@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Project</title>
+   <script src="https://maps.google.com/maps/api/js?sensor=false"></script>
+   <script>
+      const ROOM_ID = "<%= roomId %>"
+   </script>
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+   <script defer src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+   <script src="/socket.io/socket.io.js"></script>
+   <link rel="stylesheet" href="style.css">
+   <script src="https://kit.fontawesome.com/c939d0e917.js"></script>
+   <script src="script.js" defer></script>
+
+   <script>
+      function showPosition() {
+          if(navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(showMap, showError);
+          } else {
+              alert("Sorry, your browser does not support HTML5 geolocation.");
+          }
+      }
+       
+      // Define callback function for successful attempt
+      function showMap(position) {
+          // Get location data
+          lat = position.coords.latitude;
+          long = position.coords.longitude;
+          var latlong = new google.maps.LatLng(lat, long);
+          
+          var myOptions = {
+              center: latlong,
+              zoom: 16,
+              mapTypeControl: true,
+              navigationControlOptions: {
+                  style:google.maps.NavigationControlStyle.SMALL
+              }
+          }
+          
+          var map = new google.maps.Map(document.getElementById("embedMap"), myOptions);
+          var marker = new google.maps.Marker({ position:latlong, map:map, title:"You are here!" });
+      }
+       
+      // Define callback function for failed attempt
+      function showError(error) {
+          if(error.code == 1) {
+              result.innerHTML = "You've decided not to share your position, but it's OK. We won't ask you again.";
+          } else if(error.code == 2) {
+              result.innerHTML = "The network is down or the positioning service can't be reached.";
+          } else if(error.code == 3) {
+              result.innerHTML = "The attempt timed out before it could get the location data.";
+          } else {
+              result.innerHTML = "Geolocation failed due to unknown error.";
+          }
+      }
+      </script>
+
+
+
+
+   <style>
+      #video-grid{
+         display: flex;
+         justify-content: center;
+         flex-wrap: wrap;
+      }
+      video{
+         height: 300px;
+         width: 400px;
+         object-fit: cover;
+         padding: 8px;
+      }
+      
+   </style>
+</head>
+<body>
+   
+   <div class="main">
+      <div class="main__left">
+         <div class="main__videos">
+            <div id="video-grid">
+               <div> <video id="video" autoplay></video>
+               </div><br>
+               
+               <strong> </strong>
+               <br>
+               <pre id="log"></pre>
+            
+              
+              
+            </div>
+         </div>
+         <div class="main__controls">
+            <div class="main__controls__block">
+              
+               <div onclick="muteUnmute()" class="main__controls__button main__mute_button">
+                  <i class="fas fa-microphone"></i>
+                  <span>Mute</span>
+               </div>
+               <div onclick="playStop()" class="main__controls__button main__video_button" >
+                  <i class="fas fa-video"></i>
+                  <span>Stop Video</span>
+               </div>
+            </div>
+            <div class="main__controls__button">
+               <div onclick="startCapture()" class="main__controls__button main__share_button" >
+                  <i class="fas fa-share-square"></i>
+                  <span>Share Screen</span>
+               </div>
+             
+   </div>
+   <div class="main__controls__button">
+      <div onclick="stopCapture()" class="main__controls__button main__stop_button" >
+         <i class="fas fa-window-close"></i>
+         <span>Stop Share</span>
+      </div>
+    
+</div>
+               <div onclick="leave()" class="main__controls__button main__close_button" >
+                  <i class="fas fa-sign-out-alt"></i>
+                  <span>leave meeting</span>
+               </div>
+
+            
+           </div>
+            
+      </div>
+      <div class="main__right">
+         <div class="main__header">
+            <button type="button" onclick="showPosition();">Show My Position on Google Map</button>
+            <div id="embedMap" style="width: 400px; height: 300px;color:#343434 ;">
+                <!--Google map will be embedded here-->
+            </div>
+            <h6>CHAT</h6>
+         </div>
+         <div class="main__chat_window">
+            
+            <ul class="messages">
+               
+            </ul>
+           
+         </div>
+         <div class="main__message_container">
+            <input id="chat_message" type="text" placeholder="Type message here...">
+         </div>
+      </div>
+   </div>
+   
+
+  
+
+   
+
+
+
+</body>
+</html>
+</body>
+</html>
